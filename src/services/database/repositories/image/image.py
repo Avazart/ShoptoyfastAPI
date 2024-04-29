@@ -5,6 +5,7 @@ from sqlalchemy import insert, select
 from src.common.dto.image.images import (
     ProductCategoryImageDTO,
     ImageInDB,
+    ImageDTO,
 )
 from src.services.database.models.products.images import Image
 from src.services.database.repositories import BaseCrud

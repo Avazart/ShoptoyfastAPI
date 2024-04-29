@@ -2,8 +2,10 @@ from typing import Optional, List
 
 from pydantic import condecimal
 from sqlalchemy import insert, select, update, delete
+from sqlalchemy.orm import joinedload, selectinload
 
 from src.common.dto.products.product import ProductCreateDTO, ProductInDB
+from src.services.database.models.products import product
 from src.services.database.models.products.product import Product
 from src.services.database.repositories import BaseCrud
 
@@ -25,9 +27,13 @@ class ProductCrud(BaseCrud):
         return result.scalars().all()
 
     async def get_one(self, product_id: int) -> Optional[ProductInDB]:
-        stmt = select(Product).where(Product.id == product_id)
+        stmt = (
+            select(Product)
+            .options(joinedload(Product.images))
+            .where(Product.id == product_id)
+        )
         result = await self.session.execute(stmt)
-        return result.first()
+        return result.scalars().first()
 
     async def update(
         self,

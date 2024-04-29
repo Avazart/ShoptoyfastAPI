@@ -6,33 +6,30 @@ from fastapi import UploadFile
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 
-from src.common.constant.constant import URL, Directory
-from src.common.dto.image.images import (
-    ImageDTO,
-    ProductImageCategoryDTO,
-)
+from src.common.constant.constant import IMAGES_DIR
+from src.common.dto.image.images import ImageDTO, ProductCategoryImageDTO
 from src.common.filechek.file_chek import check_file
 from src.services.database.repositories.image.image import (
     ImageCrudCategory,
     ImageCrudProduct,
     ImageCrud,
 )
+from src.common.filechek.file_chek import generate_file_name
 
 router = APIRouter()
 
-router.mount("/static", StaticFiles(directory=Directory), name="static")
-
-file_path = URL
+router.mount("/static", StaticFiles(directory=IMAGES_DIR), name="static")
 
 
 @router.post("/upload_file/create/category/{id}")
 async def create_file_category(
     category_id: int,
     file: UploadFile = File(...),
-    data: ProductImageCategoryDTO = Depends(),
+    data: ProductCategoryImageDTO = Depends(),
     crud: ImageCrudCategory = Depends(ImageCrudCategory),
 ) -> ImageDTO:
     check_file(file)
+    file_path = IMAGES_DIR + generate_file_name()
     with open(file_path, "wb") as f:
         f.write(await file.read())
     result = await crud.create(
@@ -45,10 +42,11 @@ async def create_file_category(
 async def create_file_product(
     product_id: int,
     file: UploadFile = File(...),
-    data: ProductImageCategoryDTO = Depends(),
+    data: ProductCategoryImageDTO = Depends(),
     crud: ImageCrudProduct = Depends(ImageCrudProduct),
 ) -> ImageDTO:
     check_file(file)
+    file_path = IMAGES_DIR + generate_file_name()
     with open(file_path, "wb") as f:
         f.write(await file.read())
     result = await crud.create(

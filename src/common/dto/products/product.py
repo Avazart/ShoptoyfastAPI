@@ -1,6 +1,9 @@
+from typing import List
+
 from pydantic import BaseModel, condecimal
 
 from src.common.dto.base import BaseInDB
+from src.common.dto.image.images import ImageInDB, ImageDTO
 
 
 class ProductCreateDTO(BaseModel):
@@ -9,6 +12,7 @@ class ProductCreateDTO(BaseModel):
     price: condecimal(max_digits=10, decimal_places=2)
     available: bool = True
     description: str
+    image_links: List[dict]
 
     class Config:
         from_attributes = True
@@ -17,6 +21,7 @@ class ProductCreateDTO(BaseModel):
             "price": 178.9,
             "available": True,
             "description": "Loren ipsum",
+            "image_links": [],
         }
 
 
@@ -32,4 +37,5 @@ class ProductInDB(BaseInDB, ProductCreateDTO):
             "price": 178.9,
             "available": True,
             "description": "Loren ipsum",
+            "image_links": [],
         }

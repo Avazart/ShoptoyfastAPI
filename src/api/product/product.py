@@ -1,7 +1,8 @@
 from typing import Optional, List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
+from src.common.constant.constant import BASE_IMAGE_URL
 from src.common.dto.products.product import ProductCreateDTO, ProductInDB
 from src.services.database.repositories.product.product import ProductCrud
 
@@ -27,8 +28,19 @@ async def product_get(
 @router.get("/detail/{id}")
 async def product_get_one(
     product_id: int, crud: ProductCrud = Depends(ProductCrud)
-) -> Optional[List[ProductInDB]]:
+) -> Optional[ProductInDB]:
     result = await crud.get_one(product_id=product_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    image_links = [
+        {
+            "id": image.id,
+            "link": f"{BASE_IMAGE_URL}{image.id}",
+            "main": image.is_main_image,
+        }
+        for image in result.images
+    ]
+    result.image_links = image_links
     return result
 
 
