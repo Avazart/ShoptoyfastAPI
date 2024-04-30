@@ -8,17 +8,17 @@ from starlette.staticfiles import StaticFiles
 
 from src.common.constant.constant import IMAGES_DIR
 from src.common.dto.image.images import ImageDTO, ProductCategoryImageDTO
-from src.common.filechek.file_chek import check_file
+from src.common.filechek.file_check import check_file
 from src.services.database.repositories.image.image import (
     ImageCrudCategory,
     ImageCrudProduct,
     ImageCrud,
 )
-from src.common.filechek.file_chek import generate_file_name
+from src.common.filechek.file_check import generate_file_name
 
 router = APIRouter()
 
-router.mount("/static", StaticFiles(directory=IMAGES_DIR), name="static")
+
 
 
 @router.post("/upload_file/create/category/{id}")

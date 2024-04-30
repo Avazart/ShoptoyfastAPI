@@ -3,5 +3,5 @@ venv/
 .idea/
 __pycache__/
 .ruff_cache/
-/src/common/constant/constant.py
-images
+
+images/
