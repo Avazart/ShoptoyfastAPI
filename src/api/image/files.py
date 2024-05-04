@@ -19,15 +19,13 @@ from src.common.filechek.file_check import generate_file_name
 router = APIRouter()
 
 
-
-
 @router.post("/upload_file/create/category/{id}")
 async def create_file_category(
-    category_id: int,
-    file: UploadFile = File(...),
-    data: ProductCategoryImageDTO = Depends(),
-    crud: ImageCrudCategory = Depends(ImageCrudCategory),
-) -> ImageDTO:
+        category_id: int,
+        file: UploadFile = File(...),
+        data: ProductCategoryImageDTO = Depends(),
+        crud: ImageCrudCategory = Depends(ImageCrudCategory),
+):
     check_file(file)
     file_path = IMAGES_DIR + generate_file_name()
     with open(file_path, "wb") as f:
@@ -40,11 +38,11 @@ async def create_file_category(
 
 @router.post("/upload_file/create/product/{id}")
 async def create_file_product(
-    product_id: int,
-    file: UploadFile = File(...),
-    data: ProductCategoryImageDTO = Depends(),
-    crud: ImageCrudProduct = Depends(ImageCrudProduct),
-) -> ImageDTO:
+        product_id: int,
+        file: UploadFile = File(...),
+        data: ProductCategoryImageDTO = Depends(),
+        crud: ImageCrudProduct = Depends(ImageCrudProduct),
+):
     check_file(file)
     file_path = IMAGES_DIR + generate_file_name()
     with open(file_path, "wb") as f:
@@ -61,3 +59,9 @@ async def get_image(image_id: int, crud: ImageCrud = Depends(ImageCrud)):
     if result and os.path.isfile(result.url):
         return FileResponse(result.url)
     raise HTTPException(status_code=404, detail="Image not found")
+
+
+@router.delete("/images/{image_id}")
+async def image_delete(image_id: int, crud: ImageCrud = Depends(ImageCrud)):
+    result = await crud.delete(image_id=image_id)
+    return result

@@ -1,6 +1,7 @@
-from typing import Optional, List
+from typing import Optional, List, Annotated
 
-from pydantic import condecimal
+from _decimal import Decimal
+from pydantic import condecimal, Field
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -9,41 +10,46 @@ from src.services.database.models.products import product
 from src.services.database.models.products.product import Product
 from src.services.database.repositories import BaseCrud
 
+PriceType = Annotated[Decimal, Field(strict=True, max_digits=10, decimal_places=2)]
+
 
 class ProductCrud(BaseCrud):
     async def create(
         self, new_product: ProductCreateDTO
-    ) -> Optional[ProductInDB]:
+    ):
         stmt = (
             insert(Product).values(**new_product.__dict__).returning(Product)
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        return result.scalar_one_or_none()
+        result_orm = result.scalar_one_or_none()
+        return ProductInDB.model_validate(result_orm)
 
-    async def get_all(self) -> Optional[List[ProductInDB]]:
-        stmt = select(Product)
+    async def get_all(self, offset: int, limit: int):
+        stmt = select(Product).options(selectinload(Product.images)).offset(offset).limit(limit)
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        result_orm = result.scalars().all()
+        return [ProductInDB.from_product(p) for p in result_orm]
 
-    async def get_one(self, product_id: int) -> Optional[ProductInDB]:
+    async def get_one(self, product_id: int):
         stmt = (
             select(Product)
             .options(joinedload(Product.images))
             .where(Product.id == product_id)
         )
         result = await self.session.execute(stmt)
-        return result.scalars().first()
+        result_orm = result.scalar()
+        return ProductInDB.from_product(result_orm) if result_orm else None
 
     async def update(
         self,
         product_id: int,
         product_name: str,
         category_id: int,
-        product_price: condecimal(max_digits=10, decimal_places=2),
+        product_price: PriceType,
         product_available: bool,
         product_description: str,
-    ) -> Optional[ProductInDB]:
+    ):
         stmt = (
             update(Product)
             .where(Product.id == product_id)
@@ -58,12 +64,14 @@ class ProductCrud(BaseCrud):
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        return result.scalar()
+        result_orm = result.scalar()
+        return ProductInDB.model_validate(result_orm) if result_orm else None
 
-    async def delete(self, product_id: int) -> Optional[ProductInDB]:
+    async def delete(self, product_id: int):
         stmt = (
             delete(Product).where(Product.id == product_id).returning(Product)
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        return result.scalar()
+        result_orm = result.scalar()
+        return ProductInDB.model_validate(result_orm) if result_orm else None

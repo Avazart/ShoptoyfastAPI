@@ -1,10 +1,9 @@
 from typing import Optional, List
 
-
 from sqlalchemy import insert, select, update, delete
+from sqlalchemy.engine import row
 
-
-from src.common.dto.category.category import CategoryCreate, CategoryInDB
+from src.common.dto.category.category import CategoryCreateDTO, CategoryInDB
 
 from src.services.database.repositories.base import BaseCrud
 
@@ -12,7 +11,7 @@ from src.services.database.models.products.category import Category
 
 
 class CategoryCrud(BaseCrud):
-    async def create(self, new_category: CategoryCreate) -> CategoryInDB:
+    async def create(self, new_category: CategoryCreateDTO):
         stmt = (
             insert(Category)
             .values(**new_category.__dict__)
@@ -20,21 +19,24 @@ class CategoryCrud(BaseCrud):
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        return result.scalar_one_or_none()
+        result_orm = result.scalar_one()
+        return CategoryInDB.model_validate(result_orm)
 
-    async def get_all(self) -> Optional[List[CategoryInDB]]:
-        stmt = select(Category)
+    async def get_all(self, offset: int, limit: int):
+        stmt = select(Category).offset(offset).limit(limit)
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        result_orm = result.scalars().all()
+        return [CategoryInDB.model_validate(row, from_attributes=True) for row in result_orm]
 
-    async def get_one(self, category_id: int) -> Optional[CategoryInDB]:
+    async def get_one(self, category_id: int):
         stmt = select(Category).where(Category.id == category_id)
         result = await self.session.execute(stmt)
-        return result.first()
+        result_orm = result.scalar()
+        return CategoryInDB.model_validate(result_orm) if result_orm else None
 
     async def update(
-        self, category_id: int, name_category: CategoryCreate
-    ) -> Optional[CategoryInDB]:
+            self, category_id: int, name_category: CategoryCreateDTO
+    ):
         stmt = (
             update(Category)
             .where(Category.id == category_id)
@@ -43,9 +45,10 @@ class CategoryCrud(BaseCrud):
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        return result.scalar()
+        result_orm = result.scalar()
+        return CategoryInDB.model_validate(result_orm) if result_orm else None
 
-    async def delete(self, category_id: int) -> Optional[CategoryInDB]:
+    async def delete(self, category_id: int):
         stmt = (
             delete(Category)
             .where(Category.id == category_id)
@@ -53,4 +56,5 @@ class CategoryCrud(BaseCrud):
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        return result.scalar()
+        result_orm = result.scalar()
+        return CategoryInDB.model_validate(result_orm) if result_orm else None

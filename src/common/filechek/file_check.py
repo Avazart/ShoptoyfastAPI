@@ -4,9 +4,8 @@ from random import sample
 
 from fastapi import UploadFile, HTTPException
 
-
-def check_file(file: UploadFile) -> None:
-    if not file.content_type == "image/jpeg" and not file.size <= 300000:
+def check_file(file: UploadFile):
+    if file.content_type != "image/jpeg" or (file.size is not None and file.size > 300000):
         raise HTTPException(
             status_code=500, detail="ti menya ne na.. provedesh"
         )
