@@ -4,14 +4,17 @@ from random import sample
 
 from fastapi import UploadFile, HTTPException
 
+
 def check_file(file: UploadFile):
-    if file.content_type != "image/jpeg" or (file.size is not None and file.size > 300000):
+    if file.content_type != "image/jpeg" or (
+        file.size is not None and file.size > 300000
+    ):
         raise HTTPException(
             status_code=500, detail="ti menya ne na.. provedesh"
         )
 
 
-def generate_file_name(rand_text_size: int = 6):
+def generate_file_id(rand_text_size: int = 6):
     time_text = datetime.now().strftime("%m%d%Y%H%M%S")
     rand_text = "".join(sample(string.ascii_uppercase, k=rand_text_size))
-    return f"{time_text}{rand_text}.jpeg"
+    return f"{time_text}{rand_text}"

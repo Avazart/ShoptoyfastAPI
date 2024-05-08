@@ -1,15 +1,15 @@
-from typing import List, Annotated
+from typing import Annotated, Any
 
 from _decimal import Decimal
-from pydantic import BaseModel, condecimal, Field
+from pydantic import BaseModel, Field
 
-from src.common.constant.constant import BASE_IMAGE_URL
+from src.common.constant.constant import BASE_PRODUCT_IMAGE_URL
 from src.common.dto.base import BaseInDB
-from src.common.dto.image.images import ImageInDB, ImageDTO
-from src.services.database.models.products.images import Image
 from src.services.database.models.products.product import Product
 
-PriceType = Annotated[Decimal, Field(strict=True, max_digits=10, decimal_places=2)]
+PriceType = Annotated[
+    Decimal, Field(strict=True, max_digits=10, decimal_places=2)
+]
 
 
 class ProductCreateDTO(BaseModel):
@@ -24,20 +24,36 @@ class ProductCreateDTO(BaseModel):
 
 
 class ProductInDB(BaseInDB, ProductCreateDTO):
-    image_links: list[dict] = []
+    pass
 
-    class Config:
-        from_attributes = True
+
+class ProductWithImagesInDB(ProductInDB):
+    image_links: list[dict]
 
     @classmethod
-    def from_product(cls, product_with_images: Product):
-        product_in_db = cls.model_validate(product_with_images)
-        product_in_db.image_links = [
+    def model_validate(
+        cls,
+        obj: Any,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+    ):
+        product_in_db = ProductInDB.model_validate(
+            obj,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+        )
+        image_links = [
             {
                 "id": image.id,
-                "link": f'{BASE_IMAGE_URL}{image.id}',
+                "link": f"{BASE_PRODUCT_IMAGE_URL}{image.id}",
                 "main": image.is_main_image,
             }
-            for image in product_with_images.images
+            for image in obj.images
         ]
-        return product_in_db
+        return ProductWithImagesInDB(
+            **product_in_db.model_dump(),
+            image_links=image_links,
+        )

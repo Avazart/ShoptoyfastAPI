@@ -1,51 +1,50 @@
-from typing import Optional, List, Annotated
+from typing import List
 
-from _decimal import Decimal
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import Field
 
-from src.common.constant.constant import BASE_IMAGE_URL
-from src.common.dto.products.product import ProductCreateDTO, ProductInDB
+from src.common.dto.products.product import (
+    ProductCreateDTO,
+    ProductInDB,
+    ProductWithImagesInDB,
+)
 from src.services.database.repositories.product.product import ProductCrud
 
 router = APIRouter()
 
 
-
-
-@router.post("/create")
+@router.post("")
 async def product_create(
     data: ProductCreateDTO, crud: ProductCrud = Depends(ProductCrud)
-):
+) -> ProductInDB:
     result = await crud.create(new_product=data)
     return result
 
 
-@router.get("/list")
+@router.get("")
 async def product_get(
-        offset: int = 0,
-        limit: int = Query(10, ge=1, le=50),
-        crud: ProductCrud = Depends(ProductCrud),
-):
+    offset: int = 0,
+    limit: int = Query(10, ge=1, le=50),
+    crud: ProductCrud = Depends(ProductCrud),
+) -> List[ProductWithImagesInDB]:
     result = await crud.get_all(offset, limit)
     return result
 
 
-@router.get("/detail/{id}")
+@router.get("/{product_id}")
 async def product_get_one(
     product_id: int, crud: ProductCrud = Depends(ProductCrud)
-):
+) -> ProductWithImagesInDB:
     if result := await crud.get_one(product_id=product_id):
         return result
     raise HTTPException(status_code=404, detail="Product not found")
 
 
-@router.patch("/update/{id}")
+@router.patch("/{product_id}")
 async def product_update(
     product_id: int,
     data: ProductCreateDTO,
     crud: ProductCrud = Depends(ProductCrud),
-):
+) -> ProductInDB:
     result = await crud.update(
         product_id=product_id,
         category_id=data.category_id,
@@ -54,12 +53,16 @@ async def product_update(
         product_price=data.price,
         product_description=data.description,
     )
-    return result
+    if result:
+        return result
+    raise HTTPException(status_code=404, detail="Product not found")
 
 
-@router.delete("/delete/{id}")
+@router.delete("/{product_id}")
 async def product_delete(
     product_id: int, crud: ProductCrud = Depends(ProductCrud)
-):
+) -> ProductInDB:
     result = await crud.delete(product_id=product_id)
-    return result
+    if result:
+        return result
+    raise HTTPException(status_code=404, detail="Product not found")

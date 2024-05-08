@@ -1,37 +1,50 @@
-from typing import Optional, List, Annotated
+from typing import List, Annotated
 
 from _decimal import Decimal
-from pydantic import condecimal, Field
+from pydantic import Field
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.orm import joinedload, selectinload
 
-from src.common.dto.products.product import ProductCreateDTO, ProductInDB
-from src.services.database.models.products import product
+from src.common.dto.category.category import CategoryWithImagesInDB
+from src.common.dto.products.product import (
+    ProductCreateDTO,
+    ProductInDB,
+    ProductWithImagesInDB,
+)
 from src.services.database.models.products.product import Product
 from src.services.database.repositories import BaseCrud
 
-PriceType = Annotated[Decimal, Field(strict=True, max_digits=10, decimal_places=2)]
+PriceType = Annotated[
+    Decimal, Field(strict=True, max_digits=10, decimal_places=2)
+]
 
 
 class ProductCrud(BaseCrud):
-    async def create(
-        self, new_product: ProductCreateDTO
-    ):
+    async def create(self, new_product: ProductCreateDTO) -> ProductInDB:
         stmt = (
             insert(Product).values(**new_product.__dict__).returning(Product)
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
-        result_orm = result.scalar_one_or_none()
+        result_orm = result.scalar()
         return ProductInDB.model_validate(result_orm)
 
-    async def get_all(self, offset: int, limit: int):
-        stmt = select(Product).options(selectinload(Product.images)).offset(offset).limit(limit)
+    async def get_all(
+        self, offset: int, limit: int
+    ) -> List[ProductWithImagesInDB]:
+        stmt = (
+            select(Product)
+            .options(selectinload(Product.images))
+            .offset(offset)
+            .limit(limit)
+        )
         result = await self.session.execute(stmt)
         result_orm = result.scalars().all()
-        return [ProductInDB.from_product(p) for p in result_orm]
+        return [
+            ProductWithImagesInDB.model_validate(row) for row in result_orm
+        ]
 
-    async def get_one(self, product_id: int):
+    async def get_one(self, product_id: int) -> ProductWithImagesInDB | None:
         stmt = (
             select(Product)
             .options(joinedload(Product.images))
@@ -39,7 +52,11 @@ class ProductCrud(BaseCrud):
         )
         result = await self.session.execute(stmt)
         result_orm = result.scalar()
-        return ProductInDB.from_product(result_orm) if result_orm else None
+        return (
+            ProductWithImagesInDB.model_validate(result_orm)
+            if result_orm
+            else None
+        )
 
     async def update(
         self,
@@ -49,7 +66,7 @@ class ProductCrud(BaseCrud):
         product_price: PriceType,
         product_available: bool,
         product_description: str,
-    ):
+    ) -> ProductInDB | None:
         stmt = (
             update(Product)
             .where(Product.id == product_id)
@@ -67,7 +84,7 @@ class ProductCrud(BaseCrud):
         result_orm = result.scalar()
         return ProductInDB.model_validate(result_orm) if result_orm else None
 
-    async def delete(self, product_id: int):
+    async def delete(self, product_id: int) -> ProductInDB | None:
         stmt = (
             delete(Product).where(Product.id == product_id).returning(Product)
         )

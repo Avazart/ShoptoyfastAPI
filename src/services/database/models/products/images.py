@@ -1,17 +1,26 @@
 from sqlalchemy import Integer, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.services.database.models.base import Base
 
 
-class Image(Base):
-    __tablename__ = "images"
+class ProductImage(Base):
+    __tablename__: str = "product_images"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    url: Mapped[str]
-    category_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("category.id", ondelete="CASCADE"), nullable=True
-    )
+    file_id: Mapped[str]
     product_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("product.id", ondelete="CASCADE"), nullable=True
+        Integer,
+        ForeignKey("product.id", ondelete="CASCADE", onupdate="CASCADE"),
+    )
+    is_main_image: Mapped[bool]
+
+
+class CategoryImage(Base):
+    __tablename__: str = "category_images"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    file_id: Mapped[str]
+    category_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("categories.id", ondelete="CASCADE", onupdate="CASCADE"),
     )
     is_main_image: Mapped[bool]
