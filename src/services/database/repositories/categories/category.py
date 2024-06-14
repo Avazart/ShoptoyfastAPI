@@ -1,21 +1,18 @@
-from typing import List
 
-from sqlalchemy import insert, select, update, delete
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy import delete, insert, select, update
+from sqlalchemy.orm import joinedload, selectinload
 
 from src.common.dto.category.category import (
-    CategoryCreateDTO,
+    CategoryDTO,
     CategoryInDB,
     CategoryWithImagesInDB,
 )
-
-from src.services.database.repositories.base import BaseCrud
-
 from src.services.database.models.products.category import Category
+from src.services.database.repositories.base import BaseCrud
 
 
 class CategoryCrud(BaseCrud):
-    async def create(self, new_category: CategoryCreateDTO) -> CategoryInDB:
+    async def create(self, new_category: CategoryDTO) -> CategoryInDB:
         stmt = (
             insert(Category)
             .values(**new_category.__dict__)
@@ -28,7 +25,7 @@ class CategoryCrud(BaseCrud):
 
     async def get_all(
         self, offset: int, limit: int
-    ) -> List[CategoryWithImagesInDB]:
+    ) -> list[CategoryWithImagesInDB]:
         stmt = (
             select(Category)
             .options(selectinload(Category.images))
@@ -56,7 +53,7 @@ class CategoryCrud(BaseCrud):
         )
 
     async def update(
-        self, category_id: int, name_category: CategoryCreateDTO
+        self, category_id: int, name_category: CategoryDTO
     ) -> CategoryInDB | None:
         stmt = (
             update(Category)

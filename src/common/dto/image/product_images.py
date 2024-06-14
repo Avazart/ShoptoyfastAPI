@@ -1,7 +1,7 @@
-from typing import Optional
+
+from pydantic import BaseModel
 
 from src.common.dto.base import BaseInDB
-from pydantic import BaseModel
 
 
 class ProductImagesDTO(BaseModel):

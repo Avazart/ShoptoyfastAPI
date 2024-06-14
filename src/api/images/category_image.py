@@ -1,20 +1,15 @@
 import os.path
 
-from fastapi import APIRouter, Depends, File, HTTPException
-
-from fastapi import UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from starlette.responses import FileResponse
 
-from src.common.constant.constant import IMAGES_DIR
+from src.common.constants.constant import IMAGES_DIR
 from src.common.dto.image.category_images import (
     CategoryImagesDTO,
     CategoryImagesInDB,
 )
-
-from src.common.filecheck.file_check import check_file
-
-from src.common.filecheck.file_check import generate_file_id
-from src.services.database.repositories.image.category_images import (
+from src.common.file_check.file_check import check_file, generate_file_id
+from src.services.database.repositories.images.category_image import (
     CategoryImageCrud,
 )
 

@@ -3,16 +3,15 @@ from typing import Annotated, Any
 from _decimal import Decimal
 from pydantic import BaseModel, Field
 
-from src.common.constant.constant import BASE_PRODUCT_IMAGE_URL
+from src.common.constants.constant import BASE_PRODUCT_IMAGE_URL
 from src.common.dto.base import BaseInDB
-from src.services.database.models.products.product import Product
 
 PriceType = Annotated[
     Decimal, Field(strict=True, max_digits=10, decimal_places=2)
 ]
 
 
-class ProductCreateDTO(BaseModel):
+class ProductDTO(BaseModel):
     name: str
     category_id: int
     price: PriceType
@@ -23,7 +22,7 @@ class ProductCreateDTO(BaseModel):
         from_attributes = True
 
 
-class ProductInDB(BaseInDB, ProductCreateDTO):
+class ProductInDB(BaseInDB, ProductDTO):
     pass
 
 

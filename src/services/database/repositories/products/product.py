@@ -1,13 +1,12 @@
-from typing import List, Annotated
+from typing import Annotated
 
 from _decimal import Decimal
 from pydantic import Field
-from sqlalchemy import insert, select, update, delete
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import joinedload, selectinload
 
-from src.common.dto.category.category import CategoryWithImagesInDB
 from src.common.dto.products.product import (
-    ProductCreateDTO,
+    ProductDTO,
     ProductInDB,
     ProductWithImagesInDB,
 )
@@ -20,7 +19,7 @@ PriceType = Annotated[
 
 
 class ProductCrud(BaseCrud):
-    async def create(self, new_product: ProductCreateDTO) -> ProductInDB:
+    async def create(self, new_product: ProductDTO) -> ProductInDB:
         stmt = (
             insert(Product).values(**new_product.__dict__).returning(Product)
         )
@@ -31,7 +30,7 @@ class ProductCrud(BaseCrud):
 
     async def get_all(
         self, offset: int, limit: int
-    ) -> List[ProductWithImagesInDB]:
+    ) -> list[ProductWithImagesInDB]:
         stmt = (
             select(Product)
             .options(selectinload(Product.images))

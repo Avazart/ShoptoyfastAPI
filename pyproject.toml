@@ -1,3 +1,18 @@
+[tool.mypy]
+strict = false
+exclude = [
+    "^venv/.*$",
+    "^migrations/.*$",
+    "^tests/.*$",
+]
+plugins = [
+  "pydantic.mypy"
+]
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
 [tool.ruff]
 exclude =[
     ".git",
@@ -8,37 +23,32 @@ exclude =[
     "venv",
     ".venv",
     ".env",
-    ".idea"
+    ".idea",
+    "migrations"
 ]
 line-length = 79
 target-version = "py310"
+
 
 [tool.ruff.format]
 quote-style = "double"
 skip-magic-trailing-comma = false
 
-[tool.ruff.lint.isort]
-case-sensitive = true
-
 [tool.ruff.lint]
-ignore = []
-
-[tool.mypy]
-strict = false
-exclude = [
-    "^venv/.*$",
-    "^migrations/.*$",
-    "^tests/.*$",
+select = [
+    # pycodestyle
+    #"E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    #"B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
 ]
-plugins = [
-  "pydantic.mypy"
-  ]
-
-[tool.pydantic-mypy]
-init_forbid_extra = true
-init_typed = true
-warn_required_dynamic_aliases = true
-
 
 [tool.ruff.extend-per-file-ignores]
 "__init__.py" = ["F401"]

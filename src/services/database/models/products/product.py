@@ -1,11 +1,11 @@
-from sqlalchemy import Integer, String, ForeignKey, DECIMAL, Boolean, Text
+from sqlalchemy import DECIMAL, Boolean, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.services.database.models import Base
 
 
 class Product(Base):
-    __tablename__: str = "product"
+    __tablename__: str = "products"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True, index=True)

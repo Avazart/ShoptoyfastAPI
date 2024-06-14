@@ -1,22 +1,20 @@
-from typing import List
 
 from fastapi import APIRouter, Depends, Query
 from fastapi.exceptions import HTTPException
-from sqlalchemy.exc import IntegrityError
 
 from src.common.dto.category.category import (
-    CategoryCreateDTO,
+    CategoryDTO,
     CategoryInDB,
     CategoryWithImagesInDB,
 )
-from src.services.database.repositories.category.category import CategoryCrud
+from src.services.database.repositories.categories.category import CategoryCrud
 
 router = APIRouter()
 
 
 @router.post("")
 async def category_create(
-    data: CategoryCreateDTO, crud: CategoryCrud = Depends(CategoryCrud)
+    data: CategoryDTO, crud: CategoryCrud = Depends(CategoryCrud)
 ) -> CategoryInDB:
     result = await crud.create(new_category=data)
     return result
@@ -27,7 +25,7 @@ async def category_get(
     offset: int = 0,
     limit: int = Query(10, ge=1, le=50),
     crud: CategoryCrud = Depends(CategoryCrud),
-) -> List[CategoryWithImagesInDB]:
+) -> list[CategoryWithImagesInDB]:
     result = await crud.get_all(offset, limit)
     return result
 
@@ -45,7 +43,7 @@ async def category_get_one(
 @router.patch("/{category_id}")
 async def update(
     category_id: int,
-    data: CategoryCreateDTO,
+    data: CategoryDTO,
     crud: CategoryCrud = Depends(CategoryCrud),
 ) -> CategoryInDB:
     result = await crud.update(category_id=category_id, name_category=data)

@@ -1,20 +1,19 @@
-from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from src.common.dto.products.product import (
-    ProductCreateDTO,
+    ProductDTO,
     ProductInDB,
     ProductWithImagesInDB,
 )
-from src.services.database.repositories.product.product import ProductCrud
+from src.services.database.repositories.products.product import ProductCrud
 
 router = APIRouter()
 
 
 @router.post("")
 async def product_create(
-    data: ProductCreateDTO, crud: ProductCrud = Depends(ProductCrud)
+    data: ProductDTO, crud: ProductCrud = Depends(ProductCrud)
 ) -> ProductInDB:
     result = await crud.create(new_product=data)
     return result
@@ -25,7 +24,7 @@ async def product_get(
     offset: int = 0,
     limit: int = Query(10, ge=1, le=50),
     crud: ProductCrud = Depends(ProductCrud),
-) -> List[ProductWithImagesInDB]:
+) -> list[ProductWithImagesInDB]:
     result = await crud.get_all(offset, limit)
     return result
 
@@ -42,13 +41,13 @@ async def product_get_one(
 @router.patch("/{product_id}")
 async def product_update(
     product_id: int,
-    data: ProductCreateDTO,
+    data: ProductDTO,
     crud: ProductCrud = Depends(ProductCrud),
 ) -> ProductInDB:
     result = await crud.update(
         product_id=product_id,
         category_id=data.category_id,
-        product_name=data.name,
+        product_name=data.name, 
         product_available=data.available,
         product_price=data.price,
         product_description=data.description,

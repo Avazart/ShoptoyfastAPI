@@ -2,15 +2,15 @@ import string
 from datetime import datetime
 from random import sample
 
-from fastapi import UploadFile, HTTPException
+from fastapi import HTTPException, UploadFile
 
 
 def check_file(file: UploadFile):
-    if file.content_type != "image/jpeg" or (
+    if file.content_type != "images/jpeg" or (
         file.size is not None and file.size > 300000
     ):
         raise HTTPException(
-            status_code=500, detail="ti menya ne na.. provedesh"
+            status_code=500, detail="extension is not suitable"
         )
 
 

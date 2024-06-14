@@ -1,10 +1,10 @@
-from sqlalchemy import insert, select, delete
+from sqlalchemy import delete, insert, select
 
 from src.common.dto.image.product_images import (
     ProductImagesDTO,
     ProductImagesInDB,
 )
-from src.services.database.models.products.images import ProductImage
+from src.services.database.models.products.image import ProductImage
 from src.services.database.repositories import BaseCrud
 
 

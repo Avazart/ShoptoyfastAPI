@@ -1,10 +1,10 @@
-from sqlalchemy import insert, select, delete
+from sqlalchemy import delete, insert, select
 
 from src.common.dto.image.category_images import (
-    CategoryImagesInDB,
     CategoryImagesDTO,
+    CategoryImagesInDB,
 )
-from src.services.database.models.products.images import CategoryImage
+from src.services.database.models.products.image import CategoryImage
 from src.services.database.repositories import BaseCrud
 
 

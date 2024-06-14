@@ -2,23 +2,18 @@ from typing import Any
 
 from pydantic import BaseModel
 
-
-from src.common.constant.constant import BASE_CATEGORY_IMAGE_URL
+from src.common.constants.constant import BASE_CATEGORY_IMAGE_URL
 from src.common.dto.base import BaseInDB
 
-from src.services.database.models.products.category import Category
-from src.services.database.models.products.images import CategoryImage
-from src.services.database.repositories.image import category_images
 
-
-class CategoryCreateDTO(BaseModel):
+class CategoryDTO(BaseModel):
     name: str
 
     class Config:
         from_attributes = True
 
 
-class CategoryInDB(CategoryCreateDTO, BaseInDB):
+class CategoryInDB(CategoryDTO, BaseInDB):
     pass
 
 
