@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from starlette import status
 
 from src.common.dto.users.user import TokenData
-from src.core.settings import load_settings, Settings
+from src.core.settings import Settings, load_settings
 from src.services.database.models.users.user import User, UserRole
 from src.services.database.repositories.users.user import UserCRUD
 
@@ -21,7 +21,9 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-async def authenticate_user(username: str, password: str, user_crud: UserCRUD = Depends(UserCRUD)):
+async def authenticate_user(
+    username: str, password: str, user_crud: UserCRUD = Depends(UserCRUD)
+):
     user = await user_crud.get_user_by_name(username)
     if not user:
         return False
@@ -30,18 +32,20 @@ async def authenticate_user(username: str, password: str, user_crud: UserCRUD = 
     return user
 
 
-async def get_current_user(token: Annotated[str,
-Depends(oauth2_scheme)],
-                           settings: Settings = Depends(load_settings),
-                           user_crud: UserCRUD = Depends(UserCRUD)):
+async def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    settings: Settings = Depends(load_settings),
+    user_crud: UserCRUD = Depends(UserCRUD),
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -55,7 +59,7 @@ Depends(oauth2_scheme)],
 
 
 async def get_current_active_user(
-        current_user: Annotated[User, Depends(get_current_user)],
+    current_user: Annotated[User, Depends(get_current_user)],
 ) -> User:
     if current_user.role == UserRole.NOT_ACTIVATED:
         raise HTTPException(status_code=400, detail="Inactive user")

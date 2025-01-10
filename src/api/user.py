@@ -9,5 +9,7 @@ router = APIRouter()
 
 
 @router.get("/admin")
-async def admin_route(current_user: Annotated[User, Depends(RoleChecker(UserRole.CLIENT))]):
+async def admin_route(
+    current_user: Annotated[User, Depends(RoleChecker(UserRole.CLIENT))],
+):
     return {"message": "Admin route"}

@@ -16,6 +16,6 @@ class UserDTO(BaseModel):
     email: str | None = None
     role: int | None = None
 
+
 class UserInDB(UserDTO):
     hashed_password: str
-

@@ -16,5 +16,4 @@ app.include_router(
 app.include_router(
     product_image.router, prefix="/products-images", tags=["ProductImage"]
 )
-
 app.include_router(user.router, prefix="/users", tags=["User"])

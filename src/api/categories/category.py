@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, Query
 from fastapi.exceptions import HTTPException
 

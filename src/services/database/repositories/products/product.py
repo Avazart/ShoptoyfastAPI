@@ -1,6 +1,6 @@
+from _decimal import Decimal
 from typing import Annotated
 
-from _decimal import Decimal
 from pydantic import Field
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import joinedload, selectinload

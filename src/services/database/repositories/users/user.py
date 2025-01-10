@@ -1,6 +1,5 @@
-from sqlalchemy import insert, select
+from sqlalchemy import select
 
-from src.common.dto.users.user import UserDTO, UserInDB
 from src.services.database.models.users.user import User
 from src.services.database.repositories import BaseCrud
 

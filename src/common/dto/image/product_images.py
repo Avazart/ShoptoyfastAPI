@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel
 
 from src.common.dto.base import BaseInDB

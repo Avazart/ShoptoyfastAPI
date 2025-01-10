@@ -1,4 +1,4 @@
-from enum import Flag, auto, IntEnum
+from enum import IntEnum
 
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -13,7 +13,7 @@ class UserRole(IntEnum):
 
 
 class User(Base):
-    __tablename__: str = 'user'
+    __tablename__: str = "user"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String, unique=True)
     email: Mapped[str] = mapped_column(String, unique=True)

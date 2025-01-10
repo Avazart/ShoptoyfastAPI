@@ -50,7 +50,7 @@ select = [
     "I",
 ]
 
-[tool.ruff.extend-per-file-ignores]
+[lint.extend-per-file-ignores]
 "__init__.py" = ["F401"]
 
 

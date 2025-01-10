@@ -1,6 +1,6 @@
+from _decimal import Decimal
 from typing import Annotated, Any
 
-from _decimal import Decimal
 from pydantic import BaseModel, Field
 
 from src.common.constants.constant import BASE_PRODUCT_IMAGE_URL

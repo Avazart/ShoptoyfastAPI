@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from src.common.dto.products.product import (
@@ -47,7 +46,7 @@ async def product_update(
     result = await crud.update(
         product_id=product_id,
         category_id=data.category_id,
-        product_name=data.name, 
+        product_name=data.name,
         product_available=data.available,
         product_price=data.price,
         product_description=data.description,
