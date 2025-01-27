@@ -10,7 +10,10 @@ BASE_CATEGORY_IMAGE_URL: Final[str] = "http://localhost:8000/category-images/"
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", case_sensitive=True
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+        extra="ignore"
     )
     DB_HOST: str
     DB_PORT: int
