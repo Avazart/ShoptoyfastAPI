@@ -1,0 +1,38 @@
+services:
+    app:
+        container_name: shoptoy_fastpi_app
+        image: shoptoy_fastpi
+        command: python3 -m uvicorn src.__main__:app --host  0.0.0.0 --port 8000
+        environment:
+            DB_USER: $DB_USER
+            DB_PASS: $DB_PASS
+            DB_NAME: $DB_NAME
+            DB_HOST: $DB_HOST
+            DB_PORT: $DB_PORT
+            DB_URL: $DB_URL
+        depends_on:
+            database:
+                condition: service_healthy
+        ports:
+            - "8000:8000"
+
+    database:
+        container_name: shoptoy_fastpi_database
+        image: postgres:14.1-alpine
+        ports:
+            - "5432:5432"
+        volumes:
+            - ${APP_DATA}/init_db:/docker-entrypoint-initdb.d/
+            - ${APP_DATA}/database_data:/var/lib/postgresql/data
+        environment:
+            PGUSER: $DB_USER
+            PGPASSWORD: $DB_PASS
+            POSTGRES_PASSWORD: $DB_PASS
+            PGDATABASE: $DB_NAME
+            PGHOST: $DB_HOST
+            PGPORT: $DB_PORT
+        healthcheck:
+              test: ["CMD-SHELL", "pg_isready"]
+              interval: 5s
+              timeout: 5s
+              retries: 5
