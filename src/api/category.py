@@ -1,19 +1,20 @@
 from fastapi import APIRouter, Depends, Query
 from fastapi.exceptions import HTTPException
 
-from src.common.dto.category.category import (
+from src.common.dto.category import (
     CategoryDTO,
     CategoryInDB,
     CategoryWithImagesInDB,
 )
-from src.services.database.repositories.categories.category import CategoryCrud
+from src.database.repositories.category import CategoryCrud
 
 router = APIRouter()
 
 
 @router.post("")
 async def category_create(
-    data: CategoryDTO, crud: CategoryCrud = Depends(CategoryCrud)
+    data: CategoryDTO,
+    crud: CategoryCrud = Depends(CategoryCrud),
 ) -> CategoryInDB:
     result = await crud.create(new_category=data)
     return result

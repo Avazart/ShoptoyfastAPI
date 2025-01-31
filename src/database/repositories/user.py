@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
-from src.services.database.models.users.user import User
-from src.services.database.repositories import BaseCrud
+from src.database.models.user import User
+from src.database.repositories import BaseCrud
 
 
 class UserCRUD(BaseCrud):

@@ -1,9 +1,6 @@
 from fastapi import FastAPI
 
-from src.api import user
-from src.api.categories import category
-from src.api.images import category_image, product_image
-from src.api.products import product
+from src.api import category, category_image, product, product_image, user
 
 app = FastAPI(title="Gumenyuk_shop")
 

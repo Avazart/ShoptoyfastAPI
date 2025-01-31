@@ -1,11 +1,11 @@
 from sqlalchemy import delete, insert, select
 
-from src.common.dto.image.category_images import (
+from common.dto.category_images import (
     CategoryImagesDTO,
     CategoryImagesInDB,
 )
-from src.services.database.models.products.image import CategoryImage
-from src.services.database.repositories import BaseCrud
+from src.database.models.image import CategoryImage
+from src.database.repositories import BaseCrud
 
 
 class CategoryImageCrud(BaseCrud):

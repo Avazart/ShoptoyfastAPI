@@ -1,7 +1,7 @@
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.services.database.models.base import Base
+from database.models.base import Base
 
 
 class ProductImage(Base):

@@ -7,10 +7,10 @@ from jwt import InvalidTokenError
 from passlib.context import CryptContext
 from starlette import status
 
-from src.common.dto.users.user import TokenData
+from common.dto.user import TokenData
+from database.repositories.user import UserCRUD
 from src.core.settings import Settings, load_settings
-from src.services.database.models.users.user import User, UserRole
-from src.services.database.repositories.users.user import UserCRUD
+from src.database.models.user import User, UserRole
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

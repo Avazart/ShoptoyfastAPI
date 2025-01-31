@@ -1,13 +1,13 @@
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import joinedload, selectinload
 
-from src.common.dto.category.category import (
+from common.dto.category import (
     CategoryDTO,
     CategoryInDB,
     CategoryWithImagesInDB,
 )
-from src.services.database.models.products.category import Category
-from src.services.database.repositories.base import BaseCrud
+from src.database.models.category import Category
+from src.database.repositories.base import BaseCrud
 
 
 class CategoryCrud(BaseCrud):

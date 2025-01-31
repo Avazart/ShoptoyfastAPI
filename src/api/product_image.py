@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from starlette.responses import FileResponse
 
 from src.common.constants.constant import IMAGES_DIR
-from src.common.dto.image.product_images import ProductImagesDTO
+from src.common.dto.product_images import ProductImagesDTO
 from src.common.file_check.file_check import check_file, generate_file_id
-from src.services.database.repositories.images.product_image import (
+from src.database.repositories.product_image import (
     ProductImageCrud,
     ProductImagesInDB,
 )

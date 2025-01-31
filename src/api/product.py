@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from src.common.dto.products.product import (
+from src.common.dto.product import (
     ProductDTO,
     ProductInDB,
     ProductWithImagesInDB,
 )
-from src.services.database.repositories.products.product import ProductCrud
+from src.database.repositories.product import ProductCrud
 
 router = APIRouter()
 

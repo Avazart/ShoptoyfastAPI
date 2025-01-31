@@ -3,7 +3,7 @@ from enum import IntEnum
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.services.database.models import Base
+from src.database.models.base import Base
 
 
 class UserRole(IntEnum):

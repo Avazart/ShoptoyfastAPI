@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException
 
 from src.common.users.authentication import get_current_active_user
-from src.services.database.models.users.user import User, UserRole
+from src.database.models.user import User, UserRole
 
 
 class RoleChecker:

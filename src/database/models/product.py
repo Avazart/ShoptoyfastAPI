@@ -1,7 +1,7 @@
 from sqlalchemy import DECIMAL, Boolean, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.services.database.models import Base
+from src.database.models.base import Base
 
 
 class Product(Base):

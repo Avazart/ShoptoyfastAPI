@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.common.users.check_auth import RoleChecker
-from src.services.database.models.users.user import User, UserRole
+from src.database.models.user import User, UserRole
 
 router = APIRouter()
 

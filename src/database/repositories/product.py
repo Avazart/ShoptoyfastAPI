@@ -5,13 +5,13 @@ from pydantic import Field
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import joinedload, selectinload
 
-from src.common.dto.products.product import (
+from common.dto.product import (
     ProductDTO,
     ProductInDB,
     ProductWithImagesInDB,
 )
-from src.services.database.models.products.product import Product
-from src.services.database.repositories import BaseCrud
+from src.database.models.product import Product
+from src.database.repositories import BaseCrud
 
 PriceType = Annotated[
     Decimal, Field(strict=True, max_digits=10, decimal_places=2)
