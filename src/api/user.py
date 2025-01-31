@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from src.common.users.check_auth import RoleChecker
 from src.database.models.user import User, UserRole
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["User"])
 
 
 @router.get("/admin")

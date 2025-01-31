@@ -8,7 +8,7 @@ from src.common.dto.category import (
 )
 from src.database.repositories.category import CategoryCrud
 
-router = APIRouter()
+router = APIRouter(prefix="/categories", tags=["Category"])
 
 
 @router.post("")

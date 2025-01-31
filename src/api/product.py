@@ -7,7 +7,7 @@ from src.common.dto.product import (
 )
 from src.database.repositories.product import ProductCrud
 
-router = APIRouter()
+router = APIRouter(prefix="/products", tags=["Product"])
 
 
 @router.post("")

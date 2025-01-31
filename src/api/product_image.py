@@ -11,7 +11,7 @@ from src.database.repositories.product_image import (
     ProductImagesInDB,
 )
 
-router = APIRouter()
+router = APIRouter(prefix="/products-images", tags=["ProductImage"])
 
 
 @router.post("")

@@ -13,7 +13,7 @@ from database.repositories.category_image import (
 from src.common.constants.constant import IMAGES_DIR
 from src.common.file_check.file_check import check_file, generate_file_id
 
-router = APIRouter()
+router = APIRouter(prefix="/categories-images", tags=["CategoryImage"])
 
 
 @router.post("")
