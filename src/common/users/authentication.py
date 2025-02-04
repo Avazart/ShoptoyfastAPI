@@ -8,9 +8,9 @@ from passlib.context import CryptContext
 from starlette import status
 
 from src.common.dto.user import TokenData
-from src.database.repositories.user import UserCRUD
 from src.core.settings import Settings, load_settings
 from src.database.models.user import User, UserRole
+from src.database.repositories.user import UserCRUD
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

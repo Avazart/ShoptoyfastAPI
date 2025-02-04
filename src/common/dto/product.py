@@ -19,7 +19,6 @@ class ProductDTO(BaseModel):
     description: str
 
 
-
 class ProductInDB(BaseInDB, ProductDTO):
     pass
 

@@ -32,9 +32,9 @@ async def category_get(
 
 @router.get("/{category_id}")
 async def category_get_one(
-    data: int, crud: CategoryCrud = Depends(CategoryCrud)
+    category_id: int, crud: CategoryCrud = Depends(CategoryCrud)
 ) -> CategoryWithImagesInDB:
-    result = await crud.get_one(category_id=data)
+    result = await crud.get_one(category_id=category_id)
     if result:
         return result
     raise HTTPException(status_code=404, detail="Category not found")

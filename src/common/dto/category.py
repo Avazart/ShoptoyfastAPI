@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from src.common.constants.constant import BASE_CATEGORY_IMAGE_URL
 from src.common.dto.base import BaseInDB
@@ -11,7 +11,7 @@ class CategoryDTO(BaseModel):
 
 
 class CategoryInDB(CategoryDTO, BaseInDB):
-    pass
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CategoryWithImagesInDB(CategoryInDB):
