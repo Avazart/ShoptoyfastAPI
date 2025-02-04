@@ -9,9 +9,6 @@ from src.common.dto.base import BaseInDB
 class CategoryDTO(BaseModel):
     name: str
 
-    class Config:
-        from_attributes = True
-
 
 class CategoryInDB(CategoryDTO, BaseInDB):
     pass

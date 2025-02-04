@@ -18,8 +18,6 @@ class ProductDTO(BaseModel):
     available: bool = True
     description: str
 
-    class Config:
-        from_attributes = True
 
 
 class ProductInDB(BaseInDB, ProductDTO):
