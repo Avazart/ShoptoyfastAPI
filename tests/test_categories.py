@@ -1,6 +1,7 @@
 from src.common.dto.category import CategoryDTO
 
-from .conftest import test_client # noqa
+from .conftest import test_client  # noqa
+
 
 async def create_category(name: str, test_client):
     cat = CategoryDTO(name=name)
@@ -38,6 +39,7 @@ async def test_get_categories(test_client):
     assert len(json_content) == len(category_ids)
     assert {c["id"] for c in json_content} == category_ids
 
+
 async def test_get_categories_with_query_params(test_client):
     category_ids = [
         await create_category(f"test_category_{i}", test_client)
@@ -51,7 +53,7 @@ async def test_get_categories_with_query_params(test_client):
     json_content = response.json()
     assert isinstance(json_content, list)
     assert len(json_content) == limit
-    expected = category_ids[offset:offset+limit]
+    expected = category_ids[offset : offset + limit]
     assert {c["id"] for c in json_content} == set(expected)
 
 

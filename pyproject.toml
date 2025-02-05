@@ -1,3 +1,36 @@
+[project]
+name = "shoptoyfastapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "alembic>=1.14.1",
+    "asyncpg>=0.30.0",
+    "fastapi>=0.115.8",
+    "passlib>=1.7.4",
+    "pydantic-settings>=2.7.1",
+    "pyjwt>=2.10.1",
+    "python-multipart>=0.0.20",
+    "sqlalchemy>=2.0.37",
+    "uvicorn>=0.34.0",
+]
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "ruff>=0.9.4",
+    "httpx>=0.28.1",
+    "aiosqlite>=0.21.0",
+    "pytest==8.3.3",
+    "pytest-asyncio>=0.25.3",
+    "pytest-tornasync>=0.6.0.post2",
+    "pytest-trio>=0.8.0",
+    "pytest-twisted>=1.14.3",
+    "twisted>=24.11.0",
+    "anyio>=4.8.0",
+]
+
+
 [tool.mypy]
 strict = false
 exclude = [
@@ -8,6 +41,7 @@ exclude = [
 plugins = [
   "pydantic.mypy"
 ]
+
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
@@ -26,6 +60,8 @@ exclude =[
     ".idea",
     "migrations"
 ]
+
+
 line-length = 79
 target-version = "py310"
 
@@ -62,27 +98,5 @@ python_files = "test_*.py"
 pythonpath = ["."]
 asyncio_default_fixture_loop_scope = "function"
 asyncio_mode = "auto"
-#log_cli = true
-#log_cli_level = "DEBUG
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+log_cli = true
+log_cli_level = "WARNING"

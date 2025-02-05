@@ -20,6 +20,7 @@ TestingSessionLocal = async_sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
 )
 
+
 async def get_test_session() -> AsyncGenerator[AsyncSession, None]:
     async with TestingSessionLocal() as session:
         yield session
@@ -41,7 +42,6 @@ async def init_session() -> AsyncGenerator[AsyncSession, None]:
 @pytest.fixture(scope="function")
 async def test_client():
     async with AsyncClient(
-            transport=ASGITransport(app=app),
-            base_url=BASE_URL
+        transport=ASGITransport(app=app), base_url=BASE_URL
     ) as client:
         yield client
